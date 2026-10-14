@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>インバウンド顧客ターゲティング</title>
+  <style>
+    :root{--ink:#18314f;--muted:#6d809a;--blue:#36c9be;--blue2:#8be9df;--navy:#18314f;--soft:#edfafa;--bg:#f7fafc;--card:#fff;--line:#dfe7ef;--ok:#16816a;--warn:#a36b19;--ref:#6d7e92;--bad:#96515c;--shadow:0 2px 5px rgba(24,49,79,.06)}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif;line-height:1.55}
+    button,select,input{font:inherit;color:inherit} button{cursor:pointer}.app{max-width:1440px;margin:auto;padding:24px}
+    .topbar{display:flex;justify-content:space-between;gap:20px;align-items:center;padding:22px 26px;background:#fff;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:18px;color:var(--ink);box-shadow:var(--shadow)}
+    .brand{display:flex;gap:15px;align-items:center}.mark{width:47px;height:47px;border-radius:13px;background:var(--soft);display:grid;place-items:center;color:#20aa9f;font-weight:900;font-size:20px}.eyebrow{margin:0 0 3px;text-transform:uppercase;letter-spacing:.13em;font-size:11px;font-weight:800;color:#24b8ad}.topbar h1{margin:0;font-size:clamp(20px,2.4vw,31px);line-height:1.25}.status{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800;background:#f1f6f9;color:var(--navy)}.topbar .pill{background:#f1f6f9;color:var(--navy)}.dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+    .controlbar{margin-top:16px;padding:18px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr 1.2fr .85fr auto;gap:14px;align-items:end}.field label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin:0 0 6px}.field select{width:100%;min-height:44px;border:1px solid #cfdbe6;border-radius:9px;background:#fff;padding:8px 36px 8px 11px}.field select:focus{outline:3px solid rgba(54,201,190,.22);border-color:var(--blue)}.file-btn{min-height:44px;border:1px solid #bfe9e5;border-radius:9px;padding:10px 15px;background:var(--soft);color:var(--navy);font-weight:900}.file-btn:hover{background:#dcf6f3}
+    .filter-note{grid-column:1/-1;margin:-2px 0 0;color:var(--muted);font-size:12px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 14px}.tab{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 16px;font-weight:900;color:var(--muted)}.tab[aria-selected="true"]{background:var(--soft);border-color:#83ddd5;color:var(--navy);box-shadow:inset 0 3px 0 var(--blue)}.tab small{font-weight:700;opacity:.75;margin-left:5px}
+    .panel{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:14px}.section-head h2,.section-head h3{margin:0}.section-head h2{font-size:22px}.section-head h3{font-size:18px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}.legend{display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:12px}.legend span{display:inline-flex;gap:5px;align-items:center}.legend i{width:9px;height:9px;border-radius:50%;display:block}
+    .hero{padding:24px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);gap:22px;border-top:5px solid var(--blue)}.decision .kicker{display:inline-block;color:#20aa9f;font-size:12px;font-weight:900;letter-spacing:.08em}.decision h2{font-size:clamp(25px,4vw,43px);line-height:1.2;margin:8px 0 10px}.decision h2 em{font-style:normal;color:#20aa9f}.decision .reason{font-size:16px;margin:0 0 18px;max-width:740px}.facts{display:flex;gap:10px;flex-wrap:wrap}.fact{min-width:145px;padding:12px 14px;border-radius:10px;background:#fbfdfe;border:1px solid var(--line)}.fact span{display:block;color:var(--muted);font-size:11px;font-weight:900}.fact strong{display:block;font-size:21px;margin-top:2px}.action-box{background:#fbfdfe;color:var(--ink);border:1px solid var(--line);border-top:5px solid #9eacbf;border-radius:14px;padding:20px}.action-box h3{margin:0 0 12px;font-size:16px;color:var(--ink);padding-bottom:10px;border-bottom:1px solid #e9eef3}.action-box ol{margin:0;padding-left:21px}.action-box li{margin:9px 0}.action-box li::marker{color:var(--blue);font-weight:900}.action-box small{display:block;margin-top:14px;color:var(--muted)}
+    .target-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.target-card{padding:18px;position:relative;overflow:hidden;border-top:5px solid var(--blue)}.target-card:nth-child(2){border-top-color:#82ddd5}.target-card:nth-child(3){border-top-color:#9eacbf}.rankline{display:flex;justify-content:space-between;align-items:center}.rank{font-size:11px;font-weight:900;color:var(--muted);letter-spacing:.08em}.confidence{border-radius:999px;padding:4px 8px;font-size:11px;font-weight:900}.stable{background:#e2f6ed;color:var(--ok)}.caution{background:#fff0d9;color:var(--warn)}.reference{background:#eef0f4;color:var(--ref)}.suppress{background:#f8e3e6;color:var(--bad)}.target-card h3{font-size:24px;margin:6px 0}.target-card .why{color:var(--muted);font-size:13px;min-height:42px}.mini-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.mini-metrics div{background:#f7fafc;border-radius:9px;padding:9px}.mini-metrics span{display:block;font-size:10px;color:var(--muted);font-weight:800}.mini-metrics strong{font-size:15px}
+    .compare-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(350px,.8fr);gap:14px}.chart-panel,.table-panel,.profile-panel{padding:20px}.chart-panel,.table-panel{border-top:5px solid var(--blue)}.table-panel{border-top-color:#9eacbf}.matrix-wrap{position:relative;min-height:470px;background:linear-gradient(90deg,transparent 49.8%,#e4eaf0 50%,transparent 50.2%),linear-gradient(transparent 49.8%,#e4eaf0 50%,transparent 50.2%);border:1px solid var(--line);border-radius:12px;overflow:hidden}.quad-label{position:absolute;font-size:11px;font-weight:900;color:#698090;background:rgba(255,255,255,.9);padding:4px 7px;border-radius:6px}.ql1{top:8px;right:8px}.ql2{top:8px;left:8px}.ql3{bottom:8px;right:8px}.ql4{bottom:8px;left:8px}.axis-x,.axis-y{position:absolute;font-size:11px;font-weight:900;color:var(--muted)}.axis-x{bottom:8px;left:50%;transform:translateX(-50%)}.axis-y{left:8px;top:50%;transform:rotate(-90deg) translateX(-50%);transform-origin:left top}.bubble{position:absolute;transform:translate(-50%,-50%);border:0;border-radius:50%;background:rgba(54,201,190,.9);color:var(--ink);display:grid;place-items:center;text-align:center;line-height:1.15;font-size:11px;font-weight:900;box-shadow:0 4px 10px rgba(24,49,79,.12);padding:4px;transition:.2s}.bubble:hover,.bubble:focus{outline:4px solid rgba(54,201,190,.25);z-index:5}.bubble.low{background:#a7b5c6;color:#fff}.bubble.selected{background:var(--navy);color:#fff}.bubble small{display:block;font-size:9px;font-weight:700}
+    .table-wrap{overflow:auto;max-height:560px}.market-table{width:100%;border-collapse:collapse;font-size:13px}.market-table th{position:sticky;top:0;background:#f2f7f9;color:var(--muted);text-align:left;padding:10px 8px;font-size:11px;white-space:nowrap}.market-table td{padding:11px 8px;border-bottom:1px solid #e6eef2}.market-table tr{cursor:pointer}.market-table tbody tr:hover,.market-table tr.active{background:#eef8fb}.market-table td.num{text-align:right;font-variant-numeric:tabular-nums}.bar{height:5px;border-radius:99px;background:#e7eff3;overflow:hidden;margin-top:4px}.bar i{display:block;height:100%;background:var(--blue)}
+    .profile-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px}.market-list{padding:12px;max-height:690px;overflow:auto;border-top:5px solid #9eacbf}.profile-panel{border-top:5px solid var(--blue)}.market-btn{width:100%;border:0;background:transparent;border-radius:9px;padding:11px;text-align:left;display:flex;justify-content:space-between;align-items:center}.market-btn:hover{background:#f3fafa}.market-btn.active{background:var(--soft);color:var(--navy);box-shadow:inset 4px 0 0 var(--blue)}.market-btn small{display:block;color:var(--muted)}.market-btn.active small{color:#4f718b}.profile-hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.profile-hero h2{font-size:34px;margin:0}.profile-summary{color:var(--muted);margin:5px 0 0}.profile-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.profile-kpis div{padding:13px;background:#f7fafc;border-radius:9px}.profile-kpis span{display:block;color:var(--muted);font-size:11px;font-weight:900}.profile-kpis strong{font-size:18px}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.subpanel{border:1px solid var(--line);border-radius:12px;padding:16px}.subpanel h3{font-size:15px;margin:0 0 13px;padding-bottom:9px;border-bottom:1px solid #edf1f4}.spend-row{display:grid;grid-template-columns:80px 1fr 74px;gap:8px;align-items:center;margin:9px 0;font-size:12px}.spend-row .track{height:10px;border-radius:999px;background:#e8eff2;overflow:hidden}.spend-row .fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:inherit}.spend-row strong{text-align:right}.trend{display:flex;height:155px;align-items:flex-end;gap:12px;padding:12px 8px 24px;border-bottom:1px solid var(--line)}.trend-item{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center;position:relative}.trend-bar{width:min(52px,70%);background:linear-gradient(var(--blue2),var(--blue));border-radius:7px 7px 2px 2px;min-height:4px}.trend-item span{position:absolute;bottom:-23px;font-size:10px;color:var(--muted);white-space:nowrap}.trend-item b{position:absolute;top:-20px;font-size:10px;white-space:nowrap}.todo{list-style:none;padding:0;margin:0}.todo li{padding:10px 0 10px 28px;border-bottom:1px solid #edf1f3;position:relative}.todo li:before{content:"✓";position:absolute;left:0;top:10px;width:19px;height:19px;border-radius:50%;background:#e4f8f5;color:#159b90;display:grid;place-items:center;font-size:11px;font-weight:900}
+    .method{margin-top:14px;padding:15px 18px;color:var(--muted);font-size:12px}.method summary{font-weight:900;color:var(--ink);cursor:pointer}.empty{padding:50px;text-align:center;color:var(--muted)}[hidden]{display:none!important}.error{background:#ffe8e8;color:#8d3030;padding:12px;border-radius:12px;margin-top:12px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:980px){.controlbar{grid-template-columns:1fr 1fr}.hero,.compare-layout{grid-template-columns:1fr}.target-grid{grid-template-columns:1fr 1fr}.profile-layout{grid-template-columns:1fr}.market-list{max-height:280px}.profile-kpis{grid-template-columns:1fr 1fr}}
+    @media(max-width:620px){.app{padding:10px}.topbar{padding:17px;border-radius:17px}.status{display:none}.controlbar{grid-template-columns:1fr}.target-grid{grid-template-columns:1fr}.profile-grid{grid-template-columns:1fr}.profile-kpis{grid-template-columns:1fr 1fr}.facts{display:grid;grid-template-columns:1fr 1fr}.fact{min-width:0}.tab{width:100%;text-align:left}.hero{padding:17px}.matrix-wrap{min-height:410px}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand"><div class="mark">旅</div><div><p class="eyebrow">Inbound market navigator</p><h1>インバウンド顧客ターゲティング</h1></div></div>
+    <div class="status"><span class="pill"><i class="dot"></i><span id="dataStatus">データ読込中</span></span><span class="pill" id="periodStatus">―</span></div>
+  </header>
+
+  <section class="controlbar" aria-label="分析条件">
+    <div class="field"><label for="prefecture">あなたの都道府県</label><select id="prefecture"></select></div>
+    <div class="field"><label for="businessType">あなたの業種</label><select id="businessType"></select></div>
+    <div class="field"><label for="goal">今回知りたいこと</label><select id="goal"></select></div>
+    <div class="field"><label for="period">対象期間</label><select id="period"></select></div>
+    <button class="file-btn" id="chooseFiles" type="button">JSONを選択</button><input id="fileInput" type="file" accept=".json,application/json" multiple hidden>
+    <p class="filter-note" id="conditionText">都道府県と業種を選ぶと、優先市場を比較できます。</p>
+  </section>
+  <div id="errorBox" role="alert"></div>
+
+  <nav class="tabs" role="tablist" aria-label="検討する画面案">
+    <button class="tab" role="tab" aria-selected="true" data-view="executive">案A 結論から見る<small>経営者向け</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-view="compare">案B 市場を比べる<small>販促担当向け</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-view="profile">案C 顧客像を深掘る<small>商品造成向け</small></button>
+  </nav>
+
+  <section id="view-executive" role="tabpanel">
+    <div class="panel hero" id="hero"></div>
+    <div class="target-grid" id="targetCards"></div>
+  </section>
+
+  <section id="view-compare" role="tabpanel" hidden>
+    <div class="compare-layout">
+      <article class="panel chart-panel"><div class="section-head"><div><h2>市場ポジション</h2><p id="matrixCaption"></p></div><div class="legend"><span><i style="background:#36c9be"></i>比較対象</span><span><i style="background:#18314f"></i>選択中</span></div></div><div class="matrix-wrap" id="matrix"></div></article>
+      <article class="panel table-panel"><div class="section-head"><div><h3>優先市場ランキング</h3><p>行を選ぶと案Cで詳しく確認できます</p></div></div><div class="table-wrap"><table class="market-table" id="ranking"></table></div></article>
+    </div>
+  </section>
+
+  <section id="view-profile" role="tabpanel" hidden>
+    <div class="profile-layout">
+      <aside class="panel market-list" id="marketList"></aside>
+      <article class="panel profile-panel" id="profile"></article>
+    </div>
+  </section>
+
+  <details class="panel method"><summary>数字の見方と注意点</summary><p>市場規模は「訪問者ウェイト指数」を用いた比較用の指数です。金額は1人当たり加重平均で、パッケージツアー料金の按分額を含みます。優先度は、選択した目的に応じて市場規模・業種関連消費単価・平均泊数を組み合わせたダッシュボード独自の比較指標で、公的な市場評価ではありません。「参考」「非表示推奨」はサンプルが少ないなど、慎重な解釈が必要です。</p></details>
+</main>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const fmt=new Intl.NumberFormat('ja-JP',{maximumFractionDigits:0});
+const TYPES={
+  all:{label:'業種を限定しない',metric:'total_spend_unit_yen',metricLabel:'総消費単価'},
+  lodging:{label:'宿泊施設',metric:'lodging_unit_yen',metricLabel:'宿泊費単価'},
+  food:{label:'飲食店',metric:'food_unit_yen',metricLabel:'飲食費単価'},
+  shopping:{label:'小売・土産店',metric:'shopping_unit_yen',metricLabel:'買物代単価'},
+  experience:{label:'体験・観光施設',metric:'entertainment_unit_yen',metricLabel:'体験・サービス費単価'},
+  transport:{label:'交通事業者',metric:'intra_transport_unit_yen',metricLabel:'域内交通費単価'}
+};
+const GOALS={opportunity:{label:'総合的な狙い目を知りたい'},volume:{label:'来訪規模が大きい市場を知りたい'},spend:{label:'単価が高い市場を知りたい'},growth:{label:'伸びている市場を知りたい'}};
+const COMPONENTS=[['lodging_unit_yen','宿泊'],['food_unit_yen','飲食'],['intra_transport_unit_yen','交通'],['entertainment_unit_yen','体験'],['shopping_unit_yen','買物'],['other_unit_yen','その他']];
+const state={periodData:[],prefCode:17,business:'all',goal:'opportunity',period:'all',selectedNat:null,view:'executive'};
+
+function init(){
+  $('#businessType').innerHTML=Object.entries(TYPES).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+  $('#goal').innerHTML=Object.entries(GOALS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join('');
+  $('#prefecture').addEventListener('change',e=>{state.prefCode=+e.target.value;state.selectedNat=null;render()});
+  $('#businessType').addEventListener('change',e=>{state.business=e.target.value;render()});
+  $('#goal').addEventListener('change',e=>{state.goal=e.target.value;render()});
+  $('#period').addEventListener('change',e=>{state.period=e.target.value;render()});
+  $('#chooseFiles').addEventListener('click',()=>$('#fileInput').click());
+  $('#fileInput').addEventListener('change',e=>loadFiles(e.target.files));
+  $$('.tab').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.view)));
+  loadBundled();
+}
+async function loadBundled(){
+  try{
+    const manifest=await fetch('data/manifest.json').then(check);
+    const files=(manifest.data_files||manifest.files||manifest.periods||[]).map(x=>typeof x==='string'?x:(x.file||x.filename||x.path)).filter(Boolean);
+    if(!files.length) throw new Error('manifestにJSONファイルがありません');
+    const data=await Promise.all(files.map(f=>fetch(`data/${String(f).split('/').pop()}`).then(check)));
+    applyData(data);
+  }catch(e){
+    $('#dataStatus').textContent='JSONを選択してください';
+    $('#errorBox').innerHTML='<div class="error">PCで直接開いた場合は「JSONを選択」から data フォルダ内の inbound_b1_*.json をまとめて選択してください。</div>';
+  }
+}
+function check(r){if(!r.ok)throw new Error(r.status);return r.json()}
+async function loadFiles(files){
+  try{const json=await Promise.all([...files].map(f=>f.text().then(JSON.parse)));applyData(json.filter(x=>Array.isArray(x.records)));}
+  catch(e){$('#errorBox').innerHTML=`<div class="error">JSONを読み込めませんでした：${esc(e.message)}</div>`}
+}
+function applyData(data){
+  state.periodData=data.sort((a,b)=>periodKey(a.period?.id||a.records?.[0]?.period_id)-periodKey(b.period?.id||b.records?.[0]?.period_id));
+  if(!state.periodData.length)throw new Error('四半期JSONが見つかりません');
+  $('#errorBox').innerHTML='';$('#dataStatus').textContent=`${state.periodData.length}期間 読込済み`;
+  const prefSource=state.periodData[0].prefectures?.length?state.periodData[0].prefectures:[...new Map(state.periodData[0].records.filter(r=>r.nationality_code===0).map(r=>[r.pref_code,{pref_code:r.pref_code,pref_name:r.pref_name}])).values()];
+  const prefs=prefSource.map(p=>({code:+(p.pref_code??p.code),name:p.pref_name??p.name})).filter(p=>p.code&&p.name).sort((a,b)=>a.code-b.code);
+  if(!prefs.some(p=>p.code===state.prefCode))state.prefCode=prefs[0]?.code||17;
+  $('#prefecture').innerHTML=prefs.map(p=>`<option value="${p.code}" ${p.code===state.prefCode?'selected':''}>${esc(p.name)}</option>`).join('');
+  $('#period').innerHTML=`<option value="all">全期間をまとめる</option>`+state.periodData.map(d=>{const id=d.period?.id||d.records[0].period_id;const label=d.period?.label||d.records[0].period_label;return `<option value="${id}">${label}</option>`}).join('');
+  render();
+}
+function periodKey(id){const m=String(id).match(/(\d{4})Q(\d)/);return m?+m[1]*10 + +m[2]:0}
+function chosenData(){return state.period==='all'?state.periodData:state.periodData.filter(d=>(d.period?.id||d.records?.[0]?.period_id)===state.period)}
+function markets(){
+  const by=new Map();
+  chosenData().forEach(d=>d.records.filter(r=>r.pref_code===state.prefCode&&r.nationality_code!==0&&r.nationality_code!==21).forEach(r=>{
+    if(!by.has(r.nationality_code))by.set(r.nationality_code,{nationality_code:r.nationality_code,nationality_name:r.nationality_name,visit_sample:0,spend_sample:0,visitor_weighted_index:0,spend_weight_sum:0,spend_weight_sq_sum:0,nights_weighted:0,metric_stats:{},periodRows:[]});
+    const a=by.get(r.nationality_code);a.visit_sample+=+r.visit_sample||0;a.spend_sample+=+r.spend_sample||0;a.visitor_weighted_index+=+r.visitor_weighted_index||0;a.spend_weight_sum+=+r.spend_weight_sum||0;a.spend_weight_sq_sum+=+r.spend_weight_sq_sum||0;a.nights_weighted+=+r.nights_weighted||0;a.periodRows.push(r);
+    const keys=new Set([...Object.keys(r.metric_stats||{}),...COMPONENTS.map(x=>x[0]),'total_spend_unit_yen']);
+    keys.forEach(k=>{const s=r.metric_stats?.[k];if(!a.metric_stats[k])a.metric_stats[k]={sum_w:0,sum_w2:0,sum_wx:0,sum_wx2:0};const t=a.metric_stats[k];if(s){t.sum_w+=+s.sum_w||0;t.sum_w2+=+s.sum_w2||0;t.sum_wx+=+s.sum_wx||0;t.sum_wx2+=+s.sum_wx2||0}else{const den=+r.spend_weight_sum||0;t.sum_w+=den;t.sum_wx+=(+r[k]||0)*den}});
+  }));
+  let rows=[...by.values()].filter(a=>a.spend_sample>0&&a.visitor_weighted_index>0).map(a=>{Object.entries(a.metric_stats).forEach(([k,s])=>a[k]=s.sum_w?s.sum_wx/s.sum_w:0);a.avg_nights=a.spend_weight_sum?a.nights_weighted/a.spend_weight_sum:0;a.n_eff=a.spend_weight_sq_sum?a.spend_weight_sum*a.spend_weight_sum/a.spend_weight_sq_sum:0;a.reliability=stability(a);a.growth=growth(a);return a;});
+  score(rows);return rows.sort((a,b)=>b.score-a.score);
+}
+function stability(a){const s=a.metric_stats[TYPES[state.business].metric]||a.metric_stats.total_spend_unit_yen;let rse=9;if(s&&s.sum_w&&s.sum_wx){const mean=s.sum_wx/s.sum_w,variance=Math.max(0,s.sum_wx2/s.sum_w-mean*mean);rse=mean?Math.sqrt(variance/Math.max(1,a.n_eff))/Math.abs(mean):9}a.rse=rse;let code=a.spend_sample>=80&&a.n_eff>=50&&rse<=.15?'stable':a.spend_sample>=40&&a.n_eff>=25&&rse<=.25?'caution':a.spend_sample>=20&&a.n_eff>=10&&rse<=.4?'reference':'suppress';return code}
+function growth(a){const rows=a.periodRows.slice().sort((x,y)=>periodKey(x.period_id)-periodKey(y.period_id));if(rows.length<2)return null;const metric=TYPES[state.business].metric, first=+rows[rows.length-2][metric]||0,last=+rows[rows.length-1][metric]||0;return first?(last-first)/first:null}
+function percentile(rows,key){const vals=rows.map(key).filter(Number.isFinite).sort((a,b)=>a-b);return x=>{if(!vals.length)return 0;let n=vals.filter(v=>v<=x).length;return n/vals.length}}
+function score(rows){const metric=TYPES[state.business].metric,pv=percentile(rows,r=>r.visitor_weighted_index),ps=percentile(rows,r=>r[metric]||0),pn=percentile(rows,r=>r.avg_nights||0),pg=percentile(rows,r=>r.growth==null?-9:r.growth);rows.forEach(r=>{const v=pv(r.visitor_weighted_index),s=ps(r[metric]||0),n=pn(r.avg_nights||0),g=pg(r.growth==null?-9:r.growth);r.score=state.goal==='volume'?v:state.goal==='spend'?s:state.goal==='growth'?g:.5*v+.35*s+.15*n;if(r.reliability==='suppress')r.score*=.55;else if(r.reliability==='reference')r.score*=.8})}
+function selectedPrefName(){const d=state.periodData[0];return d?.prefectures?.find(p=>+(p.pref_code??p.code)===state.prefCode)?.pref_name||d?.records?.find(r=>r.pref_code===state.prefCode)?.pref_name||`都道府県コード${state.prefCode}`}
+function render(){if(!state.periodData.length)return;const rows=markets();if(!state.selectedNat||!rows.some(r=>r.nationality_code===state.selectedNat))state.selectedNat=rows[0]?.nationality_code;const periodLabel=state.period==='all'?`${state.periodData.length}期間統合`:chosenData()[0]?.records[0]?.period_label,pref=selectedPrefName();$('#periodStatus').textContent=periodLabel;$('#conditionText').textContent=`${pref}の${TYPES[state.business].label}向けに、${GOALS[state.goal].label.replace('知りたい','比較します')}`;document.title=`${pref}｜インバウンド顧客ターゲティング`;renderExecutive(rows);renderCompare(rows);renderProfile(rows)}
+function renderExecutive(rows){const top=rows[0],pref=selectedPrefName();if(!top){$('#hero').innerHTML=`<div class="empty">${esc(pref)}で表示できるデータがありません</div>`;$('#targetCards').innerHTML='';return}const type=TYPES[state.business],actions=actionsFor(top);$('#hero').innerHTML=`<div class="decision"><span class="kicker">${esc(pref)}の第一候補</span><h2><em>${esc(top.nationality_name)}</em>市場から<br>検討するのがおすすめです</h2><p class="reason">${esc(reasonFor(top,rows))}</p><div class="facts"><div class="fact"><span>市場規模指数</span><strong>${fmt.format(top.visitor_weighted_index)}</strong></div><div class="fact"><span>${esc(type.metricLabel)}</span><strong>${money(top[type.metric])}</strong></div><div class="fact"><span>平均泊数</span><strong>${top.avg_nights.toFixed(1)}泊</strong></div><div class="fact"><span>データの見方</span><strong>${stabilityLabel(top.reliability)}</strong></div></div></div><aside class="action-box"><h3>まず検討したい3つの打ち手</h3><ol>${actions.map(x=>`<li>${esc(x)}</li>`).join('')}</ol><small>数値から読み取れる傾向を施策検討の入口として表示しています。</small></aside>`;
+  $('#targetCards').innerHTML=rows.slice(0,3).map((r,i)=>`<article class="panel target-card"><div class="rankline"><span class="rank">PRIORITY ${i+1}</span><span class="confidence ${r.reliability}">${stabilityLabel(r.reliability)}</span></div><h3>${esc(r.nationality_name)}</h3><p class="why">${esc(reasonFor(r,rows))}</p><div class="mini-metrics"><div><span>市場規模指数</span><strong>${fmt.format(r.visitor_weighted_index)}</strong></div><div><span>${esc(type.metricLabel)}</span><strong>${money(r[type.metric])}</strong></div></div></article>`).join('')}
+function reasonFor(r,rows){const type=TYPES[state.business],vRank=[...rows].sort((a,b)=>b.visitor_weighted_index-a.visitor_weighted_index).findIndex(x=>x===r)+1,sRank=[...rows].sort((a,b)=>(b[type.metric]||0)-(a[type.metric]||0)).findIndex(x=>x===r)+1;if(state.goal==='volume')return `市場規模指数が比較対象中${vRank}位。まず届きやすい市場として検討できます。`;if(state.goal==='spend')return `${type.metricLabel}が比較対象中${sRank}位。高単価の商品・サービスとの相性を検討できます。`;if(state.goal==='growth')return r.growth==null?'収録期間が1期のため、成長率は参考評価です。':`前回収録期と比べた${type.metricLabel}は${pct(r.growth)}。変化を継続確認したい市場です。`;return `市場規模${vRank}位、${type.metricLabel}${sRank}位。規模と単価の両面から優先候補になっています。`}
+function actionsFor(r){const type=state.business;const mix=COMPONENTS.map(([k,l])=>({k,l,v:r[k]||0})).sort((a,b)=>b.v-a.v);const result=[];if(type==='lodging')result.push(r.avg_nights>=2.4?'連泊プランと2日目の過ごし方をセットで提示':'1泊でも選びやすい食事・体験付きプランを用意');else if(type==='food')result.push('写真付き多言語メニューと価格・内容表示を整備');else if(type==='shopping')result.push('人気価格帯を意識したセット商品と持ち帰り案内を用意');else if(type==='experience')result.push('所要時間・予約方法・言語対応を一画面で提示');else if(type==='transport')result.push('主要観光地までの乗り方・所要時間・運賃を簡潔に案内');else result.push(`${mix[0].l}支出が大きいため、関連商品との組み合わせを検討`);result.push(r.avg_nights>=2.5?'滞在2日目以降に選ばれる導線をつくる':'短い滞在でも選びやすい予約・購入導線をつくる');result.push(r.reliability==='stable'?'この市場向け施策を小さく実施し、反応を計測':'データは慎重に扱い、まず小規模テストで反応を確認');return result}
+function renderCompare(rows){const type=TYPES[state.business],visible=rows.slice(0,14),xs=visible.map(r=>r.visitor_weighted_index),ys=visible.map(r=>r[type.metric]||0),xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys),scale=(v,min,max)=>max===min?50:10+(v-min)/(max-min)*80;$('#matrixCaption').textContent=`${selectedPrefName()}｜横軸：市場規模指数 ／ 縦軸：${type.metricLabel}`;$('#matrix').innerHTML=`<span class="quad-label ql1">規模大 × 単価高</span><span class="quad-label ql2">規模小 × 単価高</span><span class="quad-label ql3">規模大 × 単価低</span><span class="quad-label ql4">規模小 × 単価低</span><span class="axis-x">市場規模 →</span><span class="axis-y">${esc(type.metricLabel)} →</span>`+visible.map(r=>{const size=Math.max(44,Math.min(76,40+Math.sqrt(r.spend_sample||0)*1.5));return `<button class="bubble ${r.reliability==='suppress'?'low':''} ${r.nationality_code===state.selectedNat?'selected':''}" style="left:${scale(r.visitor_weighted_index,xmin,xmax)}%;top:${100-scale(r[type.metric]||0,ymin,ymax)}%;width:${size}px;height:${size}px" data-nat="${r.nationality_code}" aria-label="${esc(r.nationality_name)} 市場規模 ${fmt.format(r.visitor_weighted_index)} ${esc(type.metricLabel)} ${money(r[type.metric])}">${esc(r.nationality_name)}<small>${money(r[type.metric])}</small></button>`}).join('');$$('.bubble').forEach(b=>b.addEventListener('click',()=>selectMarket(+b.dataset.nat,false)));
+  const maxV=Math.max(...rows.map(r=>r.visitor_weighted_index),1);$('#ranking').innerHTML=`<thead><tr><th>順位</th><th>国・地域</th><th>市場規模</th><th>${esc(type.metricLabel)}</th><th>信頼性</th></tr></thead><tbody>`+rows.map((r,i)=>`<tr data-nat="${r.nationality_code}" class="${r.nationality_code===state.selectedNat?'active':''}"><td>${i+1}</td><td><strong>${esc(r.nationality_name)}</strong></td><td class="num">${fmt.format(r.visitor_weighted_index)}<div class="bar"><i style="width:${r.visitor_weighted_index/maxV*100}%"></i></div></td><td class="num">${money(r[type.metric])}</td><td><span class="confidence ${r.reliability}">${stabilityLabel(r.reliability)}</span></td></tr>`).join('')+'</tbody>';$$('#ranking tbody tr').forEach(tr=>tr.addEventListener('click',()=>selectMarket(+tr.dataset.nat,true)))}
+function selectMarket(code,openProfile){state.selectedNat=code;if(openProfile)switchView('profile');render()}
+function renderProfile(rows){$('#marketList').innerHTML=`<div class="section-head"><div><h3>国・地域を選択</h3><p>${esc(selectedPrefName())}・優先度順</p></div></div>`+rows.map((r,i)=>`<button class="market-btn ${r.nationality_code===state.selectedNat?'active':''}" data-nat="${r.nationality_code}"><span><strong>${i+1}. ${esc(r.nationality_name)}</strong><small>市場規模 ${fmt.format(r.visitor_weighted_index)}</small></span><span>›</span></button>`).join('');$$('.market-btn').forEach(b=>b.addEventListener('click',()=>selectMarket(+b.dataset.nat,false)));const r=rows.find(x=>x.nationality_code===state.selectedNat)||rows[0],type=TYPES[state.business];if(!r){$('#profile').innerHTML='<div class="empty">表示できるデータがありません</div>';return}const maxComp=Math.max(...COMPONENTS.map(([k])=>r[k]||0),1);const trend=r.periodRows.slice().sort((a,b)=>periodKey(a.period_id)-periodKey(b.period_id));const maxTrend=Math.max(...trend.map(x=>+x[type.metric]||0),1);$('#profile').innerHTML=`<div class="profile-hero"><div><span class="rank">${esc(selectedPrefName())}｜TARGET PROFILE</span><h2>${esc(r.nationality_name)}</h2><p class="profile-summary">${esc(reasonFor(r,rows))}</p></div><span class="confidence ${r.reliability}">${stabilityLabel(r.reliability)}</span></div><div class="profile-kpis"><div><span>市場規模指数</span><strong>${fmt.format(r.visitor_weighted_index)}</strong></div><div><span>${esc(type.metricLabel)}</span><strong>${money(r[type.metric])}</strong></div><div><span>総消費単価</span><strong>${money(r.total_spend_unit_yen)}</strong></div><div><span>平均泊数</span><strong>${r.avg_nights.toFixed(1)}泊</strong></div></div><div class="profile-grid"><section class="subpanel"><h3>1人当たり支出の内訳</h3>${COMPONENTS.map(([k,l])=>`<div class="spend-row"><span>${l}</span><div class="track"><div class="fill" style="width:${(r[k]||0)/maxComp*100}%"></div></div><strong>${money(r[k])}</strong></div>`).join('')}</section><section class="subpanel"><h3>${esc(type.metricLabel)}の収録期別推移</h3><div class="trend">${trend.map(x=>`<div class="trend-item"><b>${money(x[type.metric])}</b><div class="trend-bar" style="height:${(+x[type.metric]||0)/maxTrend*100}%"></div><span>${esc(x.period_id)}</span></div>`).join('')}</div></section><section class="subpanel"><h3>この市場向けの施策ヒント</h3><ul class="todo">${actionsFor(r).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section><section class="subpanel"><h3>判断時に確認すること</h3><ul class="todo"><li>自社の既存顧客構成と照らし合わせる</li><li>自社商品の価格帯と支出単価の相性を見る</li><li>${r.reliability==='stable'?'継続的に四半期推移を確認する':'サンプルが限られるため、現場の反応と併せて判断する'}</li></ul></section></div>`}
+function switchView(v){state.view=v;$$('.tab').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===v)));['executive','compare','profile'].forEach(x=>$('#view-'+x).hidden=x!==v)}
+function money(v){return `${fmt.format(+v||0)}円`}
+function pct(v){return `${v>=0?'+':''}${(v*100).toFixed(0)}%`}
+function stabilityLabel(c){return({stable:'安定',caution:'注意',reference:'参考',suppress:'非表示推奨'})[c]||'参考'}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+init();
+</script>
+</body>
+</html>
